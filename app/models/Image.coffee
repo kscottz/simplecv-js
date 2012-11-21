@@ -720,7 +720,10 @@ module.exports = class Image extends Model
       b = CV.gaussianBlur(b,b,b,kernel_sz)
       return @mergeCVGray(r,g,b)
 
-  crop:(x,y,w,h)=>
+  crop:(x,y,w,h,centered=false)=>
+    if(centered):
+      x = x-(w/2)
+      y = y-(h/2)
     # we'll try and do what the user wants, not what they say
     if( x < 0 )
       alert("Crop: your crop x position is negative.")
@@ -739,6 +742,10 @@ module.exports = class Image extends Model
     return new Image( @ctx.getImageData(x,y,w,h) )
 
   blit:(img,x=0,y=0,alpha=255,mask=undefined) =>
+    # TODO: fix it when the user wants something hard, like -x or -y or
+    # x,y where the source is too big.
+    #
+    # TODO: There seems to be some weird edge effects. 
     retVal = undefined
     if( x+img.width >= @width or y+img.height >= @height )
       alert("blit - your image is too big to blit directly - crop it down please.")
@@ -806,5 +813,8 @@ module.exports = class Image extends Model
         retVal = new Image(dst)
      return retVal
     
-
+  getPixel:(x,y)->
+    temp = @getArray()
+    idx = (((y*@width)+x)*4)
+    return [temp.data[idx],temp.data[idx+1],temp.data[idx+2]]
 
