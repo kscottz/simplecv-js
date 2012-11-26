@@ -1,5 +1,5 @@
 Model = require "./model"
-CVImage = require './Image'
+#CVImage = require './Image'
 
 module.exports = class Feature extends Model
 
@@ -22,47 +22,53 @@ module.exports = class Feature extends Model
   constructor:(@image,@x,@y,@points)->
     @updateExtents()
 
-  meanColor:()->
+  meanColor:()=>
     return @image.getPixel(@x,@y)
 
-  colorDistance:(c)->
+  draw:(color=Color.RED,width=-1)=>
+    c = @image.getDrawingLayer().color(color[0],color[1],color[2])
+    @image.getDrawingLayer().fill(c);
+    @image.getDrawingLayer().noStroke();
+    @image.getDrawingLayer().point(@x,@y)
+    
+  colorDistance:(c)=>
     mc = @meanColor()
     r = mc[0]-c[0]
     g = mc[1]-c[1]
     b = mc[2]-c[2]
     return Math.sqrt(r*r+g*g+b*b)
 
-  angle:()->
+  angle:()=>
     return undefined
 
-  length:()->
+  length:()=>
     return Math.max(@width(),@height())
 
-  distanceToNearestEdge:()->
+  distanceToNearestEdge:()=>
     return Math.min(@mMinX,@mMinY,@width-@mMaxX,@height-@mMaxY)
 
-  onImageEdge:(tolerance=1)->
+  onImageEdge:(tolerance=1)=>
     return(@distanceToNearestEdge()<=tolerance)
 
-  notOnImageEdge:(tolerance=1)->
+  notOnImageEdge:(tolerance=1)=>
     return(@distanceToNearestEdge()>tolerance)
 
-  aspectRatio:()->
+  aspectRatio:()=>
     @updateExtents()
     return @mAspectRatio
 
-  width:()->
+  width:()=>
     @updateExtents()
     return @mWidth
 
-  height:()->
+  height:()=>
     @updateExtents()
     return @mHeight
 
-  crop:()->
+  crop:()=>
     return @image.crop(@x,@y,@width(),@height(),centered=true)
 
-  updateExtents:()->
+  updateExtents:()=>
     if( !@mMaxX or !@mMaxY or !@mMinX or !@mMinY or
         !@mWidth or !@mHeight or !@mExtents or !@mBoundingBox ) 
       @mMaxX = -1.7976931348623157E+10308
@@ -88,42 +94,42 @@ module.exports = class Feature extends Model
       @mExtents = [@mMaxX,@mMinX,@mMaxY,@mMinY]
       @mAspectRatio = Math.max(@mWidth,@mHeight)/Math.min(@mWidth,@mHeight)
 
-  boundingBox:()->
+  boundingBox:()=>
     @updateExtents()
     return @mBoundingBox
 
-  extents:()->
+  extents:()=>
     @updateExtents()
     return @mExtents
 
-  minY:()->
+  minY:()=>
     @updateExtents()
     return @mMinY
 
-  minX:()->
+  minX:()=>
     @updateExtents()
     return @mMinX
 
-  maxY:()->
+  maxY:()=>
     @updateExtents()
     return @mMaxY
 
-  maxX:()->
+  maxX:()=>
     @updateExtents()
     return @mMaxX
     
-  topLeftCorner:()->
+  topLeftCorner:()=>
     @updateExtents()
     return [@mMinX,@mMinY]  
   
-  topRightCorner:()->
+  topRightCorner:()=>
     @updateExtents()
     return [@mMaxX,@mMinY]  
 
-  bottomLeftCorner:()->
+  bottomLeftCorner:()=>
     @updateExtents()
     return [@mMinX,@mMaxY]  
 
-  bottomRightCorner:()->
+  bottomRightCorner:()=>
     @updateExtents()
     return [@mMaxX,@mMaxY]  

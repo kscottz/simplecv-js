@@ -43,6 +43,9 @@ Camera.beginStream((i)=>
   j  = i.crop(100,100,100,100)
   k = j.grayscale().binarize()
   i = i.blit(j,10,10)
+  fs = i.findFake()
+  for f in fs
+    alert(f)
   i.show display
 )
           </textarea>

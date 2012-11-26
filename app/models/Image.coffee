@@ -2,6 +2,8 @@
 Color = require './Color'
 Model = require './model'
 Display = require './Display'
+Feature = require './Feature'
+FeatureSet = require './FeatureSet'
 
 # The Image model allows you to pass in a Canvas,
 # HTMLImageElement, or an ImageData object and store
@@ -38,11 +40,23 @@ module.exports = class Image extends Model
       @ctx.drawImage(data, 0, 0)
     else
       throw new Error 'Cannot create Image with data type "'+data.constructor.name+'".'
+
+  findFake:()=>
+    a = 10
+    b = 10    
+    f1 = new Feature(this,a,b,[[a-1,b-1],[a-1,b+1],[a+1,b+1],[a+1,b-1]])
+    a = 100
+    b = 100
+    f2 = new Feature(this,a,b,[[a-1,b-1],[a-1,b+1],[a+1,b+1],[a+1,b-1]])
+    fs = new FeatureSet([f1,f2])
+    return fs 
+
   
   # Appends the canvas to parent element.
   # Defaults to appending it to the body.
   # If has been called before, ensure that
   # the canvas is visible.
+  
   show:(container=$("body")) =>
     if container instanceof Display
       container = container.element
@@ -721,7 +735,7 @@ module.exports = class Image extends Model
       return @mergeCVGray(r,g,b)
 
   crop:(x,y,w,h,centered=false)=>
-    if(centered):
+    if(centered)
       x = x-(w/2)
       y = y-(h/2)
     # we'll try and do what the user wants, not what they say
@@ -812,9 +826,11 @@ module.exports = class Image extends Model
             i += 4        
         retVal = new Image(dst)
      return retVal
+
     
-  getPixel:(x,y)->
+  getPixel:(x,y)=>
     temp = @getArray()
     idx = (((y*@width)+x)*4)
     return [temp.data[idx],temp.data[idx+1],temp.data[idx+2]]
+
 
