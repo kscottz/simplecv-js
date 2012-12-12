@@ -20,7 +20,8 @@ module.exports = class Feature extends Model
   image = null
   
   constructor:(@image,@x,@y,@points)->
-    @updateExtents()
+    #this.updateExtents()
+    return 
 
   meanColor:()=>
     return @image.getPixel(@x,@y)

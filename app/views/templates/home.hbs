@@ -30,6 +30,8 @@
 #   CVImage = require('models/Image')
 #   Display = require('models/Display')
 
+Feature = require('models/Feature')
+FeatureSet = require('models/FeatureSet')
 display = new Display(".livePreview")
 size = display.resolution()
 
@@ -44,8 +46,7 @@ Camera.beginStream((i)=>
   k = j.grayscale().binarize()
   i = i.blit(j,10,10)
   fs = i.findFake()
-  for f in fs
-    alert(f)
+  alert(fs.x())
   i.show display
 )
           </textarea>

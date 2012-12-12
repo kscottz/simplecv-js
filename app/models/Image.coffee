@@ -39,16 +39,16 @@ module.exports = class Image extends Model
       @ctx = @canvas.getContext("2d")
       @ctx.drawImage(data, 0, 0)
     else
-      throw new Error 'Cannot create Image with data type "'+data.constructor.name+'".'
+        throw new Error 'Cannot create Image with data type "'+data.constructor.name+'.'
+    
 
   findFake:()=>
-    a = 10
-    b = 10    
-    f1 = new Feature(this,a,b,[[a-1,b-1],[a-1,b+1],[a+1,b+1],[a+1,b-1]])
-    a = 100
-    b = 100
-    f2 = new Feature(this,a,b,[[a-1,b-1],[a-1,b+1],[a+1,b+1],[a+1,b-1]])
-    fs = new FeatureSet([f1,f2])
+    feats = []
+    for a in [0..100]
+      for b in [0..100]
+        f1 = new Feature(this,a,b,[[a-1,b-1],[a-1,b+1],[a+1,b+1],[a+1,b-1]])
+        feats.push f1
+    fs = new FeatureSet(feats)
     return fs 
 
   
@@ -709,7 +709,7 @@ module.exports = class Image extends Model
         rowStop = rowStop+update
     return new Image( output)
       
-  blur:(kernel_sz, gray=true) =>
+  blur:(kernel_sz=3, gray=true) =>
     # Do a gaussian blur, 
     # the kernel must be odd
     if( kernel_sz <= 0)
@@ -832,5 +832,4 @@ module.exports = class Image extends Model
     temp = @getArray()
     idx = (((y*@width)+x)*4)
     return [temp.data[idx],temp.data[idx+1],temp.data[idx+2]]
-
 

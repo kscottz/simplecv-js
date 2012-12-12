@@ -4,39 +4,36 @@ Feature = require './Feature'
 
 module.exports = class FeatureSet extends Model
 
-  
-class FeatureSet #extends Array 
-  # this is following
   # http://stackoverflow.com/questions/9688009/coffeescript-how-to-use-extends-for-array
   # http://stackoverflow.com/questions/7450354/why-does-setting-positions-in-a-subclass-of-array-not-change-its-length-should
   constructor:(objs)->
-    @mArray = new Array(objs)
-    
-  length:()->
+    @mArray = objs      
+
+  length:()=>
     return @mArray.length
     
-  getArray:()->
+  getArray:()=>
     return @mArray
 
-  # draw:(color=[255,0,0],width=-1)=>
-  #   for obj in @mArray
-  #     obj.draw(Color,width)
+  draw:(color=[255,0,0],width=-1)=>
+    for obj in @mArray
+      obj.draw(color,width)
 
-  # #not sure we need SHOW
-  # #
-  # #
+  #not sure we need SHOW
+  #
+  #
 
-  # x:()=>
-  #   return (obj.x for obj in @mArray)
+  x:()=>
+    return (obj.x for obj in @mArray)
 
-  # y:()=>
-  #   return (obj.y for obj in @mArray)
+  y:()=>
+    return (obj.y for obj in @mArray)
 
-  # coordinates:()=>
-  #   return ([obj.x,obj.y] for obj in @mArray)
+  coordinates:()=>
+    return ([obj.x,obj.y] for obj in @mArray)
 
-  # area:()=>
-  #   return ([obj.width()*obj.height()] for obj in @mArray)
+  area:()=>
+    return ([obj.width()*obj.height()] for obj in @mArray)
 
  # # sortArea(self):
  # # return FeatureSet(sorted(self, key = lambda f: f.area()))
